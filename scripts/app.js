@@ -79,7 +79,10 @@ function addReliefImage() {
     id: "relief-cn-img",
     type: "raster",
     source: "relief-cn",
-    paint: { "raster-fade-duration": 0 }
+    paint: {
+      "raster-fade-duration": 0,
+      "raster-opacity": ["interpolate", ["linear"], ["zoom"], 3.8, 1, 4.8, .72, 5.6, 0]
+    }
   });
 }
 
