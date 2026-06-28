@@ -1,0 +1,10 @@
+{
+  "name": "china-pins",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "preview": "python3 -m http.server 5173",
+    "deploy:preview": "npx vercel@44.0.0 --yes",
+    "deploy:prod": "npx vercel@44.0.0 --prod --yes"
+  }
+}

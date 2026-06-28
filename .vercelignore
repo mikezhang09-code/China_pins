@@ -1,0 +1,6 @@
+.git
+.spec-workflow
+.DS_Store
+node_modules
+*.log
+/tmp
