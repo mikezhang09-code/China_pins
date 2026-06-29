@@ -5,10 +5,10 @@
 ## 运行
 
 ```bash
-python3 -m http.server 5173
+python3 -m http.server 8080
 ```
 
-打开 `http://localhost:5173`。
+打开 `http://localhost:8080`。
 
 也可以使用 npm 脚本：
 

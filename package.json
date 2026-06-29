@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "preview": "python3 -m http.server 5173",
+    "dev": "npm run preview",
+    "preview": "python3 -m http.server 8080",
     "bake:relief": "python3 scripts/bake_relief.py",
     "deploy:preview": "npx vercel@44.0.0 --yes",
     "deploy:prod": "npx vercel@44.0.0 --prod --yes"
