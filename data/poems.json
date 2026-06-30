@@ -1141,12 +1141,15 @@
       "Shall I compare thee to a summer's day?",
       "Thou art more lovely and more temperate.",
       "So long as men can breathe or eyes can see,",
-      "So long lives this, and this gives life to thee.",
+      "So long lives this, and this gives life to thee."
+    ],
+    "trans": [
       "我能否把你比作夏日？",
       "你比它更可爱，也更温婉。",
       "只要人类还能呼吸、眼睛还能看见，",
       "此诗便长存，并赋予你生命。"
-    ]
+    ],
+    "bg": "莎士比亚最著名的十四行诗，以夏日为喻盛赞所爱之人的美，更宣告诗歌能让美超越时间、永世长存。"
   },
   "人生如舞台": {
     "author": "莎士比亚",
@@ -1154,12 +1157,15 @@
       "All the world's a stage,",
       "And all the men and women merely players;",
       "They have their exits and their entrances,",
-      "And one man in his time plays many parts.",
+      "And one man in his time plays many parts."
+    ],
+    "trans": [
       "全世界是一个舞台，",
       "所有男女不过是其中的演员；",
       "他们各有登场与退场，",
       "一个人一生扮演着许多角色。"
-    ]
+    ],
+    "bg": "出自喜剧《皆大欢喜》，忧郁的杰奎斯的著名独白，把人的一生比作舞台上的戏剧，道尽世事如戏。"
   },
   "罗密欧与朱丽叶·阳台": {
     "author": "莎士比亚",
@@ -1167,23 +1173,29 @@
       "But soft! What light through yonder window breaks?",
       "It is the east, and Juliet is the sun.",
       "What's in a name? That which we call a rose",
-      "By any other name would smell as sweet.",
+      "By any other name would smell as sweet."
+    ],
+    "trans": [
       "轻些！那边窗里透出的是什么光？",
       "那是东方，而朱丽叶就是太阳。",
       "名字算得了什么？我们称之为玫瑰的花，",
       "换个名字，也一样芬芳。"
-    ]
+    ],
+    "bg": "《罗密欧与朱丽叶》第二幕著名的阳台一场，罗密欧夜会朱丽叶，借「玫瑰之名」道出爱情超越家族世仇的执着。"
   },
   "亨利五世·圣克里斯宾日": {
     "author": "莎士比亚",
     "body": [
       "We few, we happy few, we band of brothers;",
       "For he today that sheds his blood with me",
-      "Shall be my brother.",
+      "Shall be my brother."
+    ],
+    "trans": [
       "我们这一小队，幸运的一小队，我们是兄弟；",
       "因为今天与我一同流血的人，",
       "就是我的兄弟。"
-    ]
+    ],
+    "bg": "《亨利五世》第四幕，阿金库尔决战前，英王亨利五世激励寡不敌众的将士，以「兄弟连」之语鼓舞士气，是英语中最著名的战前演说。"
   },
   "哈姆雷特·生存还是毁灭": {
     "author": "莎士比亚",
@@ -1191,23 +1203,29 @@
       "To be, or not to be, that is the question:",
       "Whether 'tis nobler in the mind to suffer",
       "The slings and arrows of outrageous fortune,",
-      "Or to take arms against a sea of troubles.",
+      "Or to take arms against a sea of troubles."
+    ],
+    "trans": [
       "生存还是毁灭，这是一个问题：",
       "是默默忍受命运暴虐的毒箭，",
       "还是挺身反抗无边的苦难，",
       "通过斗争把它们扫清。"
-    ]
+    ],
+    "bg": "《哈姆雷特》第三幕，王子在复仇的犹疑中独白，于生与死、忍受与反抗之间叩问存在的意义，是西方文学最著名的独白。"
   },
   "第十二夜·音乐": {
     "author": "莎士比亚",
     "body": [
       "If music be the food of love, play on;",
       "Give me excess of it, that, surfeiting,",
-      "The appetite may sicken, and so die.",
+      "The appetite may sicken, and so die."
+    ],
+    "trans": [
       "假如音乐是爱情的食粮，那就奏下去吧；",
       "让我享个饱足，好让爱欲",
       "因过饱而生厌，终至消亡。"
-    ]
+    ],
+    "bg": "喜剧《第十二夜》开场，奥西诺公爵借音乐抒发对爱情的沉溺与厌足，奠定全剧关于爱与错认的基调。"
   },
   "麦克白·明天": {
     "author": "莎士比亚",
@@ -1215,34 +1233,43 @@
       "Tomorrow, and tomorrow, and tomorrow,",
       "Creeps in this petty pace from day to day,",
       "Out, out, brief candle!",
-      "Life's but a walking shadow.",
+      "Life's but a walking shadow."
+    ],
+    "trans": [
       "明天，又一个明天，再一个明天，",
       "一天接一天地蹑步前行，",
       "熄灭吧，熄灭吧，短暂的烛火！",
       "人生不过是一个行走的影子。"
-    ]
+    ],
+    "bg": "《麦克白》第五幕，得知夫人死讯的麦克白发出这段苍凉独白，把人生看作转瞬即灭的烛火与行走的影子，是其野心幻灭后的虚无之叹。"
   },
   "暴风雨·梦中之物": {
     "author": "莎士比亚",
     "body": [
       "We are such stuff as dreams are made on,",
       "And our little life is rounded with a sleep.",
-      "O brave new world, that has such people in't!",
+      "O brave new world, that has such people in't!"
+    ],
+    "trans": [
       "我们都是梦幻所凝成的人物，",
       "我们短暂的一生，前后都环绕在睡眠之中。",
       "啊，美丽的新世界，竟有这样的人物！"
-    ]
+    ],
+    "bg": "《暴风雨》近乎莎士比亚的告别之作，魔法师普洛斯彼罗道出「人生如梦」，在宽恕与放下中谢幕。"
   },
   "神曲·地狱篇·开篇": {
     "author": "但丁",
     "body": [
       "Nel mezzo del cammin di nostra vita",
       "mi ritrovai per una selva oscura,",
-      "ché la diritta via era smarrita.",
+      "ché la diritta via era smarrita."
+    ],
+    "trans": [
       "在我们人生旅途的中途，",
       "我发现自己置身于一座幽暗的森林，",
       "因为那正直的道路已经迷失。"
-    ]
+    ],
+    "bg": "《神曲》全诗的开篇三行。人到中年的但丁迷失在幽暗的森林，象征精神的迷途，由此展开穿越地狱、炼狱、天堂的灵魂之旅。"
   },
   "神曲·天堂篇·放逐预言": {
     "author": "但丁",
@@ -1252,25 +1279,31 @@
       "che l'arco de lo essilio pria saetta.",
       "Tu proverai sì come sa di sale",
       "lo pane altrui, e come è duro calle",
-      "lo scendere e 'l salir per l'altrui scale.",
+      "lo scendere e 'l salir per l'altrui scale."
+    ],
+    "trans": [
       "你将离开一切你最珍爱的事物——",
       "这正是放逐之弓，",
       "最先射出的那一支箭。",
       "你将尝到，别人的面包",
       "多么咸涩；上下别人的楼梯，",
       "是多么艰难的路。"
-    ]
+    ],
+    "bg": "《天堂篇》中，但丁的先祖卡恰圭达预言他将被逐出佛罗伦萨、尝尽寄人篱下的辛酸——这正是但丁本人流放生涯的写照。"
   },
   "神曲·三篇终章·群星": {
     "author": "但丁",
     "body": [
       "...e quindi uscimmo a riveder le stelle. （《地狱篇》终）",
       "...puro e disposto a salire a le stelle. （《炼狱篇》终）",
-      "...l'amor che move il sole e l'altre stelle. （《天堂篇》终）",
+      "...l'amor che move il sole e l'altre stelle. （《天堂篇》终）"
+    ],
+    "trans": [
       "……于是我们走出此地，重见那满天繁星。（地狱篇 终）",
       "……纯净了，准备好飞升向那群星。（炼狱篇 终）",
       "……是爱，推动着太阳和群星。（天堂篇 终）"
-    ]
+    ],
+    "bg": "《神曲》地狱、炼狱、天堂三部曲，每部都以「群星（stelle）」一词收尾。三句终章并置，从重见星空到「爱推动群星」，标记灵魂层层上升的历程。"
   },
   "奥德赛·开篇": {
     "author": "荷马",
@@ -1281,7 +1314,8 @@
       "在攻陷特洛伊的圣城之后，他四处漂泊，",
       "见识过许多种族的城邦，领教过他们的心智，",
       "在海上历尽磨难，只为保全性命，带同伴还乡。"
-    ]
+    ],
+    "bg": "《奥德赛》开篇对缪斯的祈求。史诗就此唱起足智多谋的奥德修斯在特洛伊战后十年漂泊、历尽磨难只为还乡的故事。"
   },
   "奥德赛·塞壬之歌": {
     "author": "荷马",
@@ -1293,7 +1327,8 @@
       "他们听罢满载欢愉，也满载智慧而去。",
       "我们知晓特洛伊城下的一切苦难，",
       "也知晓大地上将要发生的种种。"
-    ]
+    ],
+    "bg": "奥德修斯归途中，海妖塞壬以「知晓一切」的甜美歌声诱惑过往水手走向死亡。他命水手以蜡封耳、将自己缚于桅杆，方得听其歌而不亡。"
   },
   "奥德赛·还乡": {
     "author": "荷马",
@@ -1304,7 +1339,8 @@
       "哪怕只为此死去，也别无所求。",
       "世上没有什么，比一个人的故土和双亲，",
       "更为甜美——纵使他身处再富饶的异乡。"
-    ]
+    ],
+    "bg": "女神卡吕普索以长生不死挽留奥德修斯，他却宁死也要重见故乡的炊烟——这一段道出全诗的内核：故土与亲人，胜过世间一切。"
   },
   "郑和·天妃灵应碑": {
     "author": "郑和",
