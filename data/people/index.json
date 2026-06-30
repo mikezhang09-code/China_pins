@@ -128,6 +128,30 @@
       "era": "明·永乐",
       "region": "印度洋",
       "path": "data/zhenghe-journey.json"
+    },
+    {
+      "id": "lewisclark",
+      "label": "发现军团",
+      "name": "刘易斯与克拉克",
+      "era": "美国西进",
+      "region": "北美",
+      "path": "data/lewisclark-journey.json"
+    },
+    {
+      "id": "bolivar",
+      "label": "玻利瓦尔",
+      "name": "西蒙·玻利瓦尔",
+      "era": "南美独立",
+      "region": "南美",
+      "path": "data/bolivar-journey.json"
+    },
+    {
+      "id": "columbus",
+      "label": "哥伦布",
+      "name": "克里斯托弗·哥伦布",
+      "era": "大航海时代",
+      "region": "大西洋",
+      "path": "data/columbus-journey.json"
     }
   ]
 }
