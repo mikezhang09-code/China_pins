@@ -171,6 +171,42 @@
       "region": "大西洋",
       "group": "美洲",
       "path": "data/columbus-journey.json"
+    },
+    {
+      "id": "magellan",
+      "label": "麦哲伦",
+      "name": "麦哲伦",
+      "era": "大航海时代",
+      "region": "环球",
+      "group": "美洲",
+      "path": "data/magellan-journey.json"
+    },
+    {
+      "id": "sanmartin",
+      "label": "圣马丁",
+      "name": "何塞·德·圣马丁",
+      "era": "南美独立",
+      "region": "南美",
+      "group": "美洲",
+      "path": "data/sanmartin-journey.json"
+    },
+    {
+      "id": "che",
+      "label": "切",
+      "name": "切·格瓦拉",
+      "era": "古巴革命",
+      "region": "拉美",
+      "group": "美洲",
+      "path": "data/che-journey.json"
+    },
+    {
+      "id": "darwin",
+      "label": "小猎犬号",
+      "name": "达尔文",
+      "era": "维多利亚时代",
+      "region": "环球",
+      "group": "美洲",
+      "path": "data/darwin-journey.json"
     }
   ]
 }
