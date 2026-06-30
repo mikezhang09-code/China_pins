@@ -1,6 +1,6 @@
 # 山河行旅图
 
-一个可复用的山河叙事地图模板。当前示例把苏轼、李白的生平节点、代表作品和诗句落到真实中国地图上。
+一个可复用的山河叙事地图模板。底图为**全球**真实地形，既支持中国人物（苏轼、李白、杜甫……，附省界与省名细节），也支持横跨欧亚与地中海的世界人物（成吉思汗、玄奘、拿破仑、恺撒……）。每位人物的生平节点、代表作品/事件和引文都落在真实经纬度上。
 
 ## 运行
 
@@ -35,9 +35,9 @@ npm run deploy:prod
 
 ## 数据结构
 
-人物索引在 `data/people/index.json`，首页启动时只加载索引和默认人物。点击人物切换后，前端会按 `path` 懒加载对应的 journey JSON。
+人物索引在 `data/people/index.json`，首页启动时只加载索引和默认人物。点击人物切换后，前端会按 `path` 懒加载对应的 journey JSON。索引条目含 `region` 字段（如 `中国`/`欧亚`/`欧洲`/`地中海`）用于归类。
 
-叙事数据在 `data/sushi-journey.json`、`data/libai-journey.json` 和 `data/genghis-journey.json`：
+每位人物一份 journey JSON（如 `data/sushi-journey.json`、`data/napoleon-journey.json`、`data/caesar-journey.json`）。新增人物 = 加一份 journey JSON + 在索引里登记，前端代码无需改动：
 
 - `id`：人物数据集 ID
 - `heading`：地图标题
@@ -58,25 +58,34 @@ npm run deploy:prod
 
 ## 图层结构
 
-- MapLibre GL JS 负责地图渲染和交互
-- `tiles/relief/{z}/{x}/{y}.webp` 是用公开 Terrarium DEM 瓦片烘焙的 relief raster tiles
-- `geo/100000_full.json` 和 `geo/china-outline.json` 提供真实中国边界
-- `geo/ne_50m_rivers_cn.json`、`geo/ne_50m_lakes_cn.json` 提供水系
+- MapLibre GL JS 负责地图渲染和交互（globe 投影）
+- `tiles/relief/{z}/{x}/{y}.webp` 是用公开 Terrarium DEM 瓦片烘焙的全球 relief raster tiles
+- `geo/world-land.json` 提供全球陆地底色，`geo/world-countries.json` 提供世界国界
+- `geo/world-rivers.json`、`geo/world-lakes.json` 提供全球水系
+- `geo/100000_full.json` 额外提供中国省界与省名标注（仅在视野含中国时可见）
+- 实时 Terrarium DEM hillshade 在 z4.8+ 全球懒加载，补足高 zoom 地形细节
 - DOM Marker 负责竖牌地点标注
 - GeoJSON LineString 负责生平路线和当前进度路线
 
 ## 烘焙 relief 瓦片
 
 ```bash
+# 可选：先并发预热 DEM 缓存（比烘焙脚本内串行下载快很多）
+python3 scripts/prefetch_dem.py
+# 再烘焙
 npm run bake:relief
 ```
 
-脚本会下载 AWS Open Data 的 Terrarium DEM 瓦片到 `.cache/terrarium/`，输出 `tiles/relief/{z}/{x}/{y}.webp`。当前采用混合瓦片策略：
+脚本会下载 AWS Open Data 的 Terrarium DEM 瓦片到 `.cache/terrarium/`，输出 `tiles/relief/{z}/{x}/{y}.webp`。瓦片策略：
 
-- 全球低 zoom：`z0-z3`
-- 东亚区域细节：`z4-z6`
+- 全球 relief：`z0-z5`（`z0-z3` 整图渲染，`z4-z5` 整行条带渲染以控内存，上下补 1 瓦片保证山体阴影无缝）
+- 东亚额外细节：`z6`
+- 其余地区 `z6+` 由 `z5` overzoom + 实时 hillshade 承担
 
-MapLibre 会按当前视野懒加载可见瓦片。全球层在高 zoom 会 overzoom 低级瓦片，中国范围则叠加更细的局部 relief。
+MapLibre 会按当前视野懒加载可见瓦片。
+
+> 若 Python 报 `CERTIFICATE_VERIFY_FAILED`（python.org 版常见），用 certifi 提供根证书：
+> `SSL_CERT_FILE=$(python3 -c 'import certifi;print(certifi.where())') python3 scripts/bake_relief.py`
 
 数据来源：
 

@@ -18,9 +18,14 @@ OUT_DIR = ROOT / "tiles" / "relief"
 CACHE = ROOT / ".cache" / "terrarium"
 NATURAL_EARTH_CACHE = ROOT / ".cache" / "natural-earth" / "ne_110m_land.geojson"
 MAX_MERCATOR_LAT = 85.0511287798066
-GLOBAL_ZOOMS = range(0, 4)
-REGIONAL_ZOOMS = range(4, 7)
+# 全球 relief 烘焙到 z5（z0-3 整图渲染，z4-5 走条带渲染以控内存）。
+# z6 仅东亚，给中国额外细节；其余地区 z6+ 由 z5 overzoom + 实时山体阴影承担。
+GLOBAL_ZOOMS = range(0, 6)
+REGIONAL_ZOOMS = range(6, 7)
 TILE_SIZE = 256
+# 世界宽度像素 <= 此阈值时整图渲染，否则按整行条带渲染
+WHOLE_IMAGE_MAX_PX = 2048
+STRIP_PAD = 1  # 条带上下各补 1 瓦片，保证山体阴影梯度跨带连续
 GLOBAL_BOUNDS = (-180.0, MAX_MERCATOR_LAT, 180.0, -MAX_MERCATOR_LAT)
 REGIONAL_BOUNDS = (56.25, 55.77657301866769, 140.625, 16.636191878397664)
 TERRARIUM_URL = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png"
@@ -163,6 +168,17 @@ def tile_range(zoom: int, bounds: tuple[float, float, float, float]) -> tuple[in
     return x0, x1, y0, y1
 
 
+def compose(elevation: np.ndarray, land_mask: np.ndarray) -> Image.Image:
+    shade = hillshade(elevation)
+    land = colorize(elevation)
+    land = land * (0.72 + shade[:, :, None] * 0.38)
+
+    sea_gradient = SEA[None, None, :] * 0.82 + PAPER[None, None, :] * 0.18
+    rgb = sea_gradient * (1 - land_mask[:, :, None]) + land * land_mask[:, :, None]
+    rgb = add_paper_texture(rgb)
+    return Image.fromarray(np.clip(rgb, 0, 255).astype(np.uint8), "RGB")
+
+
 def render_zoom(
     zoom: int,
     bounds: tuple[float, float, float, float]
@@ -181,16 +197,38 @@ def render_zoom(
             elevation[py : py + TILE_SIZE, px : px + TILE_SIZE] = elev
 
     land_mask = np.asarray(draw_land_mask(width, height, zoom, x0, y0)).astype(np.float32) / 255.0
-    shade = hillshade(elevation)
-    land = colorize(elevation)
-    land = land * (0.72 + shade[:, :, None] * 0.38)
-
-    sea_gradient = SEA[None, None, :] * 0.82 + PAPER[None, None, :] * 0.18
-    rgb = sea_gradient * (1 - land_mask[:, :, None]) + land * land_mask[:, :, None]
-    rgb = add_paper_texture(rgb)
-
-    image = Image.fromarray(np.clip(rgb, 0, 255).astype(np.uint8), "RGB")
+    image = compose(elevation, land_mask)
     return image, x0, x1, y0, y1
+
+
+def bake_global_strip_zoom(zoom: int) -> int:
+    """整行条带渲染整个世界，控内存且山体阴影跨带连续。"""
+    limit = 2 ** zoom
+    width = limit * TILE_SIZE
+    rows = 1 + 2 * STRIP_PAD
+    height = rows * TILE_SIZE
+    count = 0
+    for ty in range(limit):
+        y0 = ty - STRIP_PAD
+        elevation = np.zeros((height, width), dtype=np.float32)
+        for x in range(limit):
+            for j in range(rows):
+                tile_y = y0 + j
+                if tile_y < 0 or tile_y >= limit:
+                    continue
+                elev = decode_terrarium(fetch_tile(zoom, x, tile_y))
+                elevation[j * TILE_SIZE : (j + 1) * TILE_SIZE, x * TILE_SIZE : (x + 1) * TILE_SIZE] = elev
+        land_mask = np.asarray(draw_land_mask(width, height, zoom, 0, y0)).astype(np.float32) / 255.0
+        image = compose(elevation, land_mask)
+        top = STRIP_PAD * TILE_SIZE
+        for x in range(limit):
+            left = x * TILE_SIZE
+            tile = image.crop((left, top, left + TILE_SIZE, top + TILE_SIZE))
+            path = OUT_DIR / str(zoom) / str(x) / f"{ty}.webp"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tile.save(path, quality=88, method=6)
+            count += 1
+    return count
 
 
 def write_tiles(image: Image.Image, zoom: int, x0: int, x1: int, y0: int, y1: int) -> int:
@@ -209,16 +247,22 @@ def write_tiles(image: Image.Image, zoom: int, x0: int, x1: int, y0: int, y1: in
 
 def main() -> None:
     total = 0
-    jobs = [
-        ("global", GLOBAL_ZOOMS, GLOBAL_BOUNDS),
-        ("regional", REGIONAL_ZOOMS, REGIONAL_BOUNDS),
-    ]
-    for label, zooms, bounds in jobs:
-        for zoom in zooms:
-            image, x0, x1, y0, y1 = render_zoom(zoom, bounds)
+    # 全球层：低 zoom 整图渲染，高 zoom 条带渲染
+    for zoom in GLOBAL_ZOOMS:
+        if 2 ** zoom * TILE_SIZE <= WHOLE_IMAGE_MAX_PX:
+            image, x0, x1, y0, y1 = render_zoom(zoom, GLOBAL_BOUNDS)
             count = write_tiles(image, zoom, x0, x1, y0, y1)
-            total += count
-            print(f"Wrote {label} z{zoom} tiles x{x0}-{x1 - 1}, y{y0}-{y1 - 1} ({count} tiles)")
+            print(f"Wrote global z{zoom} whole-image ({count} tiles)")
+        else:
+            count = bake_global_strip_zoom(zoom)
+            print(f"Wrote global z{zoom} striped ({count} tiles)")
+        total += count
+    # 东亚区域层：z6 额外细节
+    for zoom in REGIONAL_ZOOMS:
+        image, x0, x1, y0, y1 = render_zoom(zoom, REGIONAL_BOUNDS)
+        count = write_tiles(image, zoom, x0, x1, y0, y1)
+        total += count
+        print(f"Wrote regional z{zoom} tiles x{x0}-{x1 - 1}, y{y0}-{y1 - 1} ({count} tiles)")
     print(f"Wrote {total} relief tiles to {OUT_DIR}")
 
 

@@ -1,10 +1,9 @@
 const DEFAULT_BOUNDS = [[97, 20.5], [123, 45]];
 const HOME_PADDING = { top: 96, bottom: 96, left: 42, right: 42 };
 const REGIONAL_RELIEF_TILE_BOUNDS = [56.25, 16.63619, 140.625, 55.77657];
-const RELIEF_VERSION = "20260629-genghis";
+const RELIEF_VERSION = "20260630-world";
 const RELIEF_TILES = `tiles/relief/{z}/{x}/{y}.webp?v=${RELIEF_VERSION}`;
 const DEM_TILES = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
-const DEM_BOUNDS = [73, 17, 135, 54];
 
 let points = [];
 let markers = [];
@@ -94,13 +93,13 @@ function addReliefTiles() {
     tiles: [RELIEF_TILES],
     tileSize: 256,
     minzoom: 0,
-    maxzoom: 3
+    maxzoom: 5
   });
   map.addSource("relief-cn", {
     type: "raster",
     tiles: [RELIEF_TILES],
     tileSize: 256,
-    minzoom: 4,
+    minzoom: 6,
     maxzoom: 6,
     bounds: REGIONAL_RELIEF_TILE_BOUNDS
   });
@@ -124,14 +123,19 @@ function addReliefTiles() {
   });
 }
 
-function addChinaLayers(china) {
-  map.addSource("china", { type: "geojson", data: china });
+function addWorldBase(land) {
+  map.addSource("world-land", { type: "geojson", data: land });
+  // 全球陆地纸质底色，垫在 relief 栅格之下
   map.addLayer({
     id: "relief-base",
     type: "fill",
-    source: "china",
+    source: "world-land",
     paint: { "fill-color": "#aebd8a", "fill-opacity": 1 }
   }, "relief-global-img");
+}
+
+function addChinaProvinces(china) {
+  map.addSource("china", { type: "geojson", data: china });
   map.addLayer({
     id: "prov-fill",
     type: "fill",
@@ -141,19 +145,8 @@ function addChinaLayers(china) {
       "fill-opacity": 0.14
     }
   });
-  map.addLayer({
-    id: "prov-line",
-    type: "line",
-    source: "china",
-    paint: { "line-color": "#a98e5f", "line-width": 0.75, "line-opacity": 0.72 }
-  });
-  map.addLayer({
-    id: "country-line",
-    type: "line",
-    source: "china",
-    paint: { "line-color": "#7c5b31", "line-width": 1.9, "line-opacity": 0.66 }
-  });
 
+  // 省名标注只对中国有意义；查看其他地区时它们随地图移出视野，互不干扰
   china.features.forEach((feature) => {
     const center = feature.properties && (feature.properties.center || feature.properties.centroid);
     if (!center) return;
@@ -171,47 +164,34 @@ function addChinaLayers(china) {
   });
 }
 
-function addMask(outline) {
-  const holes = [];
-  outline.features.forEach((feature) => {
-    const geometry = feature.geometry;
-    if (!geometry) return;
-    const polygons = geometry.type === "MultiPolygon" ? geometry.coordinates : [geometry.coordinates];
-    polygons.forEach((polygon) => {
-      if (polygon && polygon[0]) holes.push(polygon[0]);
-    });
-  });
-  map.addSource("mask", {
-    type: "geojson",
-    data: {
-      type: "Feature",
-      geometry: {
-        type: "Polygon",
-        coordinates: [[[-180, -85], [180, -85], [180, 85], [-180, 85], [-180, -85]], ...holes]
-      }
-    }
-  });
+function addBorders(countries) {
+  map.addSource("world-countries", { type: "geojson", data: countries });
+  // 世界各国国界
   map.addLayer({
-    id: "mask",
-    type: "fill",
-    source: "mask",
-    paint: {
-      "fill-color": "#ece1c6",
-      "fill-opacity": ["interpolate", ["linear"], ["zoom"], 2.4, .42, 4, .22, 5.2, .06, 6, 0]
-    }
-  }, "prov-line");
+    id: "country-line",
+    type: "line",
+    source: "world-countries",
+    paint: { "line-color": "#7c5b31", "line-width": 1.1, "line-opacity": 0.5 }
+  });
+  // 中国省界（叠在国界之上，给中国人物更细的脉络）
+  map.addLayer({
+    id: "prov-line",
+    type: "line",
+    source: "china",
+    paint: { "line-color": "#a98e5f", "line-width": 0.75, "line-opacity": 0.66 }
+  });
 }
 
 function addWater(rivers, lakes) {
   map.addSource("rivers", { type: "geojson", data: rivers });
   map.addSource("lakes", { type: "geojson", data: lakes });
-  const before = map.getLayer("mask") ? "mask" : "prov-line";
+  // 水系叠在 relief 之上、国界/省界之下（addBorders 在此之后调用）
   map.addLayer({
     id: "lakes",
     type: "fill",
     source: "lakes",
     paint: { "fill-color": "#8cb8bf", "fill-opacity": 0.78 }
-  }, before);
+  });
   map.addLayer({
     id: "rivers-under",
     type: "line",
@@ -222,7 +202,7 @@ function addWater(rivers, lakes) {
       "line-opacity": 0.42,
       "line-width": ["interpolate", ["linear"], ["zoom"], 3, 1.6, 7, 4.4]
     }
-  }, before);
+  });
   map.addLayer({
     id: "rivers",
     type: "line",
@@ -233,17 +213,17 @@ function addWater(rivers, lakes) {
       "line-opacity": 0.95,
       "line-width": ["interpolate", ["linear"], ["zoom"], 3, .75, 7, 2.1]
     }
-  }, before);
+  });
 }
 
 function addTerrainSources() {
+  // 全球地形阴影：去掉区域 bounds，按视野从 AWS Terrarium 懒加载
   const dem = {
     type: "raster-dem",
     encoding: "terrarium",
     tiles: [DEM_TILES],
     tileSize: 256,
-    maxzoom: 8,
-    bounds: DEM_BOUNDS
+    maxzoom: 8
   };
   map.addSource("dem", dem);
   map.addSource("dem-hs", { ...dem });
@@ -258,7 +238,7 @@ function addTerrainSources() {
       "hillshade-accent-color": "#8a6a3f",
       "hillshade-exaggeration": 0.18
     }
-  }, "prov-line");
+  });
 }
 
 function makeRoute() {
@@ -582,11 +562,12 @@ function drawMist() {
 map.on("load", async () => {
   try {
     addReliefTiles();
-    const [china, outline, rivers, lakes, peopleIndex, poemData] = await Promise.all([
+    const [land, countries, china, rivers, lakes, peopleIndex, poemData] = await Promise.all([
+      getJson("geo/world-land.json"),
+      getJson("geo/world-countries.json"),
       getJson("geo/100000_full.json"),
-      getJson("geo/china-outline.json"),
-      getJson("geo/ne_50m_rivers_cn.json"),
-      getJson("geo/ne_50m_lakes_cn.json"),
+      getJson("geo/world-rivers.json"),
+      getJson("geo/world-lakes.json"),
       getJson("data/people/index.json"),
       getJson("data/poems.json")
     ]);
@@ -597,10 +578,11 @@ map.on("load", async () => {
     renderPersonSelect();
     activeJourney = await loadJourney(defaultJourneyId);
     points = activeJourney.points;
-    addChinaLayers(china);
-    addMask(outline);
+    addWorldBase(land);
+    addChinaProvinces(china);
     addWater(rivers, lakes);
     addTerrainSources();
+    addBorders(countries);
     addRouteLayer();
     renderTitle();
     renderMarkers();

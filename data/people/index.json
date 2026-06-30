@@ -64,6 +64,22 @@
       "era": "两宋之交",
       "region": "中国",
       "path": "data/liqingzhao-journey.json"
+    },
+    {
+      "id": "napoleon",
+      "label": "波拿巴",
+      "name": "拿破仑",
+      "era": "法兰西第一帝国",
+      "region": "欧洲",
+      "path": "data/napoleon-journey.json"
+    },
+    {
+      "id": "caesar",
+      "label": "恺撒",
+      "name": "尤利乌斯·恺撒",
+      "era": "罗马共和末期",
+      "region": "地中海",
+      "path": "data/caesar-journey.json"
     }
   ]
 }
