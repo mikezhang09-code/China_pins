@@ -7,6 +7,7 @@
   "seal": "汗",
   "searchPlaceholder": "斡难河、中都、讹答剌、撒马尔罕",
   "loaderText": "正在载入欧亚山河与成吉思汗征服节点",
+  "bounds": [[52.1, 31.8], [124.3, 50.9]],
   "types": {
     "origin": {
       "label": "草原",

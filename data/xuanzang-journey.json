@@ -7,6 +7,7 @@
   "seal": "奘",
   "searchPlaceholder": "那烂陀、流沙、心经、高昌",
   "loaderText": "正在载入欧亚山河与玄奘西行求法节点",
+  "bounds": [[60.6, 22.6], [118.8, 45.4]],
   "types": {
     "origin": {
       "label": "源起",

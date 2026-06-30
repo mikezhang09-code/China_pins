@@ -7,6 +7,7 @@
   "seal": "李",
   "searchPlaceholder": "长安、庐山、夜郎、将进酒",
   "loaderText": "正在载入中国边界、水系与太白行迹节点",
+  "bounds": [[101.3, 26.9], [121.6, 36.8]],
   "types": {
     "origin": {
       "label": "蜀中",

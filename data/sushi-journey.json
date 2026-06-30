@@ -7,6 +7,7 @@
   "seal": "苏",
   "searchPlaceholder": "黄州、赤壁赋、荔枝",
   "loaderText": "正在载入中国边界、水系与东坡行旅节点",
+  "bounds": [[101.6, 17.2], [122.4, 38.3]],
   "types": {
     "origin": {
       "label": "故乡",

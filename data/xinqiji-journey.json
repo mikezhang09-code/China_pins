@@ -7,6 +7,7 @@
   "seal": "辛",
   "searchPlaceholder": "飞虎军、赏心亭、村居、北固亭",
   "loaderText": "正在载入中国边界、水系与稼轩行历节点",
+  "bounds": [[111.8, 27.0], [120.7, 37.9]],
   "types": {
     "origin": {
       "label": "起义",

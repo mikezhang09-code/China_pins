@@ -7,6 +7,7 @@
   "seal": "杜",
   "searchPlaceholder": "草堂、登高、长安、石壕吏",
   "loaderText": "正在载入中国边界、水系与少陵行迹节点",
+  "bounds": [[102.2, 28.2], [118.9, 37.5]],
   "types": {
     "origin": {
       "label": "故乡",

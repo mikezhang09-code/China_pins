@@ -7,6 +7,7 @@
   "seal": "李",
   "searchPlaceholder": "溪亭、双溪、金石录、寻寻觅觅、重阳",
   "loaderText": "正在载入中国边界、水系与易安行历节点",
+  "bounds": [[113.1, 27.9], [121.8, 38.4]],
   "types": {
     "origin": {
       "label": "闺秀",
