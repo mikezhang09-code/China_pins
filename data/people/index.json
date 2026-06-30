@@ -155,6 +155,15 @@
       "path": "data/washington-journey.json"
     },
     {
+      "id": "lincoln",
+      "label": "林肯",
+      "name": "亚伯拉罕·林肯",
+      "era": "美国南北战争",
+      "region": "北美",
+      "group": "美洲",
+      "path": "data/lincoln-journey.json"
+    },
+    {
       "id": "lewisclark",
       "label": "发现军团",
       "name": "刘易斯与克拉克",
